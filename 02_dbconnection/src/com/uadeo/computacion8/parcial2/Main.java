@@ -1,25 +1,22 @@
 package com.uadeo.computacion8.parcial2;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hola IntelliJIDEA");
-        String sql = "select id,name,email,firstname,lastname from users";
-        try (Connection cnn = SqliteConnection.Connect();
-             Statement stmt = cnn.createStatement();
-             ResultSet rst = stmt.executeQuery(sql)) {
-            while (rst.next()) {
-                System.out.println(rst.getInt("id") + "\t" +
-                                   rst.getString("name") + "\t" +
-                                   rst.getString("email") + "\t" +
-                                   rst.getString("firstname") + "\t" +
-                                   rst.getString("lastname"));
-            }
+        try {
+            List<User> users = User.getAll();
+            System.out.println(users.size());
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            User user = User.login("bidkar", "123");
+            System.out.println("Hola " + user.getFirstname() + " " + user.getLastname());
+            user.changePassword("321");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
